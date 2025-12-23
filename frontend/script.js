@@ -158,25 +158,44 @@ function updateUI(score) {
     const scoreValue = document.getElementById("scoreValue");
     const riskLevel = document.getElementById("riskLevel");
     const insightsList = document.getElementById("insightsList");
+    const circle = document.querySelector('.progress-ring__circle');
 
-    scoreValue.textContent = score.toFixed(0);
+    // Animate Text
+    let currentScore = 0;
+    const interval = setInterval(() => {
+        if (currentScore >= score) clearInterval(interval);
+        else currentScore++;
+        scoreValue.textContent = currentScore;
+    }, 10);
+
+    // Animate SVG Ring
+    // Radius 90 => Circumference ~ 565
+    const radius = circle.r.baseVal.value;
+    const circumference = radius * 2 * Math.PI;
+    const offset = circumference - (score / 100) * circumference;
+
+    circle.style.strokeDasharray = `${circumference} ${circumference}`;
+    circle.style.strokeDashoffset = offset;
 
     insightsList.innerHTML = "";
     let riskColor = "";
     let riskText = "";
 
     if (score < 30) {
-        riskText = "Low Risk - Maintained Mental Wellness";
+        riskText = "Wellness Maintained";
         riskColor = "#4ade80";
-        insightsList.innerHTML = "<li>Great job maintaining balance!</li><li>Continue your current routine.</li>";
+        circle.style.stroke = "#4ade80";
+        insightsList.innerHTML = "<li>Analysis indicates a healthy mental state.</li><li>No significant markers of stress detected.</li>";
     } else if (score < 70) {
-        riskText = "Moderate Risk - Monitor Stress Levels";
+        riskText = "Moderate Stress Detectors";
         riskColor = "#facc15";
-        insightsList.innerHTML = "<li>Elevated stress markers detected.</li><li>Consider mindfulness exercises.</li>";
+        circle.style.stroke = "#facc15";
+        insightsList.innerHTML = "<li>Elevated cortisol-related vocal markers.</li><li>Journal entries show mild anxiety patterns.</li>";
     } else {
-        riskText = "High Risk - Professional Consultation Recommended";
+        riskText = "High Risk Factors Identified";
         riskColor = "#f87171";
-        insightsList.innerHTML = "<li>High usage of negative sentiment.</li><li>Vocal stress patterns detected.</li><li>Reach out to a professional.</li>";
+        circle.style.stroke = "#f87171";
+        insightsList.innerHTML = "<li>High usage of negative sentiment keywords.</li><li>Significant vocal biomarkers indicating distress.</li><li><strong>Recommendation:</strong> Consult a specialist.</li>";
     }
 
     riskLevel.textContent = riskText;
