@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+torch
+torchaudio
+transformers
+numpy
+pandas
+scikit-learn
+python-multipart
+python-jose[cryptography]
+passlib[bcrypt]
+kagglehub
+sqlalchemy
